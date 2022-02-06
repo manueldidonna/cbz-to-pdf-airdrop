@@ -53,7 +53,7 @@ struct ConvertComicBooks: ParsableCommand {
             throw ValidationError("You have to enable AirDrop sharing or specify an output directory.")
         }
 
-        if outputDirectory != nil, outputDirectory?.isDirectory == false || outputDirectory?.isWritable == false {
+        if outputDirectory != nil, outputDirectory?.isDirectory == false {
             throw ValidationError("The directory you passed isn't a valid output destination.")
         }
     }
@@ -62,7 +62,7 @@ struct ConvertComicBooks: ParsableCommand {
         print("👋 You passed \(files.count) comic(s) to convert!")
         files.forEach { url in print("- \(booksEmoji.randomElement() ?? "") \(url.deletingPathExtension().lastPathComponent)") }
         do {
-            print("🚧👷 Starting conversion...")
+            print("\n🚧👷 Starting conversion...")
             let convertedFiles = files
                 .map { file in convertArchiveToPdf(archive: file, outputDirectory: outputDirectory) }
                 .filter { url in url != nil }
@@ -73,7 +73,7 @@ struct ConvertComicBooks: ParsableCommand {
             }
 
             if outputDirectory != nil {
-                print("🔎 You can find your local files in: \(outputDirectory?.relativePath ?? "")")
+                print("🔎 You can find your converted files in: \(outputDirectory?.relativePath ?? "")")
             }
 
             if airdrop {
@@ -82,7 +82,7 @@ struct ConvertComicBooks: ParsableCommand {
 
                 let task = AirDropTask(
                     onExecutionStart: {
-                        print("🚀 Sending \(convertedFiles.count) comic(s) over AirDrop...")
+                        print("\n🚀 Sending \(convertedFiles.count) comic(s) over AirDrop...")
                         RunLoop.main.run()
                     },
                     onExecutionEnd: {
@@ -172,10 +172,6 @@ private extension URL {
 
     var isReadable: Bool {
         (try? resourceValues(forKeys: [.isReadableKey]))?.isReadable == true
-    }
-
-    var isWritable: Bool {
-        (try? resourceValues(forKeys: [.isWritableKey]))?.isReadable == true
     }
 }
 
