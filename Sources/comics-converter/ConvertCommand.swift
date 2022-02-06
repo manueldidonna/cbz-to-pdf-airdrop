@@ -81,10 +81,6 @@ struct ConvertComicBooks: ParsableCommand {
                 let verbose = verbosePrints
 
                 let task = AirDropTask(
-                    onExecutionStart: {
-                        print("\n🚀 Sending \(convertedFiles.count) comic(s) over AirDrop...")
-                        RunLoop.main.run()
-                    },
                     onExecutionEnd: {
                         print("✅ Files were sent successfully!")
                         if verbose {
@@ -95,6 +91,11 @@ struct ConvertComicBooks: ParsableCommand {
                     itemsToSend: convertedFiles as [Any]
                 )
                 try task.execute()
+                
+                print("\n🚀 Sending \(convertedFiles.count) comic(s) over AirDrop...")
+                
+                // Wait until AirDropTask ends
+                RunLoop.main.run()
             }
         } catch {
             print("⚠️ Error: \(error)")

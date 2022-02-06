@@ -1,14 +1,13 @@
 import AppKit
 
 struct AirDropTask {
-    let onExecutionStart: () -> Void
     let onExecutionEnd: () -> Void
     let itemsToSend: [Any]
 }
 
 extension AirDropTask {
     struct MissingServiceError: Error {}
-    struct UnsupportedFilesError: Error {}
+    struct UnsupportedItemsError: Error {}
 
     func execute() throws -> Void {
         guard let service = NSSharingService(named: .sendViaAirDrop) else {
@@ -16,18 +15,17 @@ extension AirDropTask {
         }
 
         if !service.canPerform(withItems: itemsToSend) {
-            throw UnsupportedFilesError()
+            throw UnsupportedItemsError()
         }
     
         let delegate = DefaultSharingServiceDelegate(onSharingEnd: onExecutionEnd)
         service.delegate = delegate
         service.perform(withItems: itemsToSend)
-        onExecutionStart()
     }
 }
 
 private class DefaultSharingServiceDelegate: NSObject, NSSharingServiceDelegate {
-    let onSharingEnd: () -> Void
+    private let onSharingEnd: () -> Void
 
     init(onSharingEnd: @escaping () -> Void) {
         self.onSharingEnd = onSharingEnd
