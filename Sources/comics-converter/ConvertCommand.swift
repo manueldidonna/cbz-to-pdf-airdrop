@@ -3,12 +3,11 @@ import ArgumentParser
 import Foundation
 import PDFKit
 import ZIPFoundation
-import zlib
 
 @main
 struct ConvertComicBooks: ParsableCommand {
     @Argument(
-        help: "Comics archives to convert. Allowed formats: .cbz",
+        help: "Comic archives to convert. Allowed formats: .cbz",
         completion: .file(extensions: ["cbz"]),
         transform: { URL(fileURLWithPath: $0) }
     )
