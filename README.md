@@ -11,6 +11,6 @@ You can run the script by using `$ swift run mephisto`, but this works only if y
 $ git clone https://github.com/manueldidonna/mephisto.git
 $ cd mephisto/
 $ swift build -c release
-$ cp .build/release/comics-converter /usr/local/bin/comics-converter
+$ cp .build/release/mephisto /usr/local/bin/mephisto
 $ mephisto --help
 ```
