@@ -5,7 +5,9 @@ import PDFKit
 import ZIPFoundation
 
 @main
-struct ConvertComicBooks: ParsableCommand {
+struct ComicBookZipToPdf: ParsableCommand {
+    static var configuration: CommandConfiguration = .init(commandName: "cbz-to-pdf")
+
     @Argument(
         help: "Comic archives to convert. Allowed formats: .cbz",
         completion: .file(extensions: ["cbz"]),
@@ -76,6 +78,8 @@ struct ConvertComicBooks: ParsableCommand {
             }
 
             if airdrop {
+                print("\n🚀 Sending \(convertedFiles.count) comic(s) over AirDrop...")
+
                 // Can't capture struct property in an escaping closure
                 let verbose = verbosePrints
 
@@ -85,14 +89,12 @@ struct ConvertComicBooks: ParsableCommand {
                         if verbose {
                             print("🧹 Some temporary files will be removed by the OS in the next few days.")
                         }
-                        ConvertComicBooks.exit(withError: ExitCode.success)
+                        ComicBookZipToPdf.exit(withError: ExitCode.success)
                     },
                     itemsToSend: convertedFiles as [Any]
                 )
                 try task.execute()
-                
-                print("\n🚀 Sending \(convertedFiles.count) comic(s) over AirDrop...")
-                
+
                 // Wait until AirDropTask ends
                 RunLoop.main.run()
             }

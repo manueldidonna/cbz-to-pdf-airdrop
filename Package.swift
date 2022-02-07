@@ -4,7 +4,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "comics-converter",
+    name: "mephisto",
     platforms: [
         .macOS(.v10_12),
     ],
@@ -14,12 +14,12 @@ let package = Package(
     ],
     targets: [
         .executableTarget(
-            name: "comics-converter",
+            name: "mephisto",
             dependencies: [
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
                 .byName(name: "ZIPFoundation"),
             ]),
         .testTarget(
-            name: "comics-converterTests",
-            dependencies: ["comics-converter"]),
+            name: "mephistoTests",
+            dependencies: ["mephisto"]),
     ])
