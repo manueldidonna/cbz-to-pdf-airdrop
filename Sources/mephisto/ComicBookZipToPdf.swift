@@ -62,6 +62,11 @@ struct ComicBookZipToPdf: ParsableCommand {
     mutating func run() throws {
         print("👋 You passed \(files.count) comic(s) to convert!")
         files.forEach { url in print("- \(booksEmoji.randomElement() ?? "") \(url.deletingPathExtension().lastPathComponent)") }
+
+        if !askConfirmationToProceed() {
+            ComicBookZipToPdf.exit(withError: ExitCode.success)
+        }
+
         do {
             print("\n🚧👷 Starting conversion...")
             let convertedFiles = files
@@ -101,6 +106,22 @@ struct ComicBookZipToPdf: ParsableCommand {
         } catch {
             print("⚠️ Error: \(error)")
         }
+    }
+
+    private func askConfirmationToProceed() -> Bool {
+        print("\n🤔 Are you sure you want to proceed? [y/n] ", terminator: "")
+        var agree: Bool?
+        repeat {
+            switch readLine()?.lowercased() {
+            case "y", "yes":
+                agree = true
+            case "n", "no":
+                agree = false
+            default:
+                print("Invalid input. Type [y/n]: ", terminator: "")
+            }
+        } while agree == nil
+        return agree ?? false
     }
 
     private struct ArchiveMissingImageError: Error {}
